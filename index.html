@@ -414,12 +414,37 @@
     pointer-events: none; transition: opacity 0.4s;
   }
   .music-hint.hide { opacity: 0; }
+  /* ---- Écran d'accueil : un toucher pour ouvrir = le son peut démarrer ---- */
+  #gate {
+    position: fixed; inset: 0; z-index: 30;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+    background: radial-gradient(ellipse at center, var(--bg2), var(--bg1) 75%);
+    cursor: pointer; text-align: center; padding: 20px;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  #gate.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  #gate .gate-gift { font-size: clamp(80px, 22vw, 130px); animation: giftBounce 1s ease-in-out infinite alternate; }
+  @keyframes giftBounce { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-14px) rotate(4deg); } }
+  #gate .gate-title { font-size: clamp(22px, 6vw, 34px); font-weight: 800; color: var(--gold); }
+  #gate .gate-btn {
+    font: inherit; font-weight: 800; font-size: 18px; border: none; cursor: pointer;
+    padding: 14px 30px; border-radius: 999px; color: #1a0b3d;
+    background: linear-gradient(90deg, var(--gold), var(--accent2));
+    box-shadow: 0 10px 30px rgba(255,212,94,0.35);
+  }
+  #gate .gate-sub { font-size: 13px; color: #b8a9e0; }
 </style>
 </head>
 <body>
 <canvas id="confetti"></canvas>
 <button id="musicBtn" class="music-btn" type="button" aria-label="Musique">🔇</button>
-<div id="musicHint" class="music-hint">Touche pour la musique 🎵</div>
+<div id="musicHint" class="music-hint hide">Touche pour la musique 🎵</div>
+<div id="gate">
+  <div class="gate-gift">🎁</div>
+  <div class="gate-title">Tu as reçu une invitation !</div>
+  <button class="gate-btn" type="button">🎉 Ouvrir l'invitation</button>
+  <div class="gate-sub">🔊 Monte le son !</div>
+</div>
 
 <div id="intro">
   <div class="intro-label">La fête commence dans</div>
@@ -763,7 +788,14 @@
   // Relance le gâteau + décompte à CHAQUE affichage de la page :
   // ouverture, rafraîchissement, retour arrière, ou retour dans l'onglet/l'appli (téléphone)
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  startIntro();
+  // L'invité touche « Ouvrir l'invitation » : la musique démarre avec le décompte du gâteau
+  const gateEl = document.getElementById('gate');
+  gateEl.addEventListener('click', () => {
+    musicUserOff = false;
+    startMusic();
+    gateEl.classList.add('hidden');
+    startIntro();
+  });
   window.addEventListener('pageshow', (e) => { if (e.persisted) startIntro(); });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && !window.__rsvpSent) startIntro();
