@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anniversaire de Lyam</title>
+<style>
+  :root {
+    --bg1: #0a0620;
+    --bg2: #1a0b3d;
+    --accent1: #b06ef5;
+    --accent2: #4ee8ff;
+    --gold: #ffd45e;
+    --text: #f5f0ff;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    background: radial-gradient(ellipse at top, var(--bg2), var(--bg1) 70%);
+    color: var(--text);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg1: #0a0620; --bg2: #1a0b3d; --text: #f5f0ff;
+    }
+  }
+
+  .stage {
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 1.4vh, 12px);
+    padding: env(safe-area-inset-top, 10px) 14px env(safe-area-inset-bottom, 10px);
+    overflow: hidden;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(176,110,245,0.35), transparent 40%),
+      radial-gradient(circle at 80% 15%, rgba(78,232,255,0.3), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(255,212,94,0.15), transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .title-wrap {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .kicker {
+    font-size: clamp(10px, 2vh, 15px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  h1 {
+    font-size: clamp(24px, 5.5vh, 48px);
+    line-height: 1.05;
+    margin: 0;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent2), var(--accent1), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px rgba(176,110,245,0.35);
+  }
+
+  .sub {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-size: clamp(11px, 2.1vh, 16px);
+    color: #d9c9ff;
+    margin: 0;
+    max-width: 600px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .sub b { color: var(--gold); }
+
+  .photo-frame {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 1;
+    min-height: 0;
+    max-height: 34vh;
+    width: auto;
+    max-width: min(80vw, 340px);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 14px 40px rgba(0,0,0,0.6), 0 0 60px rgba(176,110,245,0.3);
+    border: 3px solid transparent;
+    background: linear-gradient(var(--bg2), var(--bg2)) padding-box,
+                linear-gradient(135deg, var(--accent2), var(--accent1), var(--gold)) border-box;
+  }
+
+  .photo-frame img {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  .details {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 440px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    border-radius: 14px;
+    padding: clamp(8px, 1.6vh, 16px) clamp(12px, 3vw, 20px);
+    display: grid;
+    gap: clamp(4px, 1vh, 10px);
+    flex-shrink: 0;
+  }
+
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(11px, 2vh, 15px);
+  }
+
+  .detail-row .ico {
+    font-size: clamp(15px, 2.4vh, 19px);
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .cta {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    text-decoration: none;
+    display: inline-block;
+    padding: clamp(8px, 1.6vh, 14px) clamp(22px, 5vw, 34px);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: clamp(12px, 2.2vh, 16px);
+    color: #1a0b3d;
+    background: linear-gradient(90deg, var(--gold), var(--accent2));
+    box-shadow: 0 10px 30px rgba(255,212,94,0.35);
+    transition: transform 0.15s ease;
+  }
+  .cta:active { transform: scale(0.97); }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 1.6vw, 12px);
+    flex-shrink: 0;
+  }
+
+  .cta-confetti {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  }
+
+  .footer-note {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(9px, 1.6vh, 12px);
+    color: #b8a9e0;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  canvas#confetti {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: radial-gradient(ellipse at center, var(--bg2), var(--bg1) 75%);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  #intro.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  #intro .intro-label {
+    font-size: clamp(14px, 4vw, 18px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  #intro .gift-wrap {
+    position: relative;
+    width: clamp(150px, 40vw, 260px);
+    height: clamp(150px, 34vh, 220px);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 14px 40px rgba(0,0,0,0.6), 0 0 60px rgba(176,110,245,0.35);
+  }
+  #intro .gift-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #intro .countdown-num {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+  }
+  #intro .countdown-num {
+    font-size: clamp(40px, 10vw, 64px);
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 18px rgba(0,0,0,0.6), 0 0 30px rgba(255,212,94,0.6);
+  }
+  #intro .countdown-num.pulse {
+    animation: pulsePop 0.5s ease;
+  }
+  @keyframes pulsePop {
+    0% { transform: translateY(-50%) scale(0.4); opacity: 0; }
+    60% { transform: translateY(-50%) scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .stage {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .stage.reveal {
+    opacity: 1;
+  }
+  /* ---- Gâteau : les 6 bougies s'allument une par une = décompte ---- */
+  #intro .cake-wrap {
+    position: relative;
+    width: min(86vw, 430px, 58vh);
+    aspect-ratio: 1;
+    filter: drop-shadow(0 16px 30px rgba(0,0,0,0.5));
+  }
+  #intro .cake-img, #intro .cake-fx {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+  #intro .cake-fx { overflow: visible; }
+  .wicks line { stroke: #4a2616; stroke-width: 9; stroke-linecap: round; }
+  .flame-slot .flame {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    opacity: 0;
+    transform: scale(0);
+  }
+  .flame-slot .halo { fill: url(#halo); }
+  .flame-slot.lit .flame {
+    opacity: 1;
+    transform: scale(1);
+    animation: ignite 0.45s ease-out, flicker 0.4s 0.45s ease-in-out infinite alternate;
+  }
+  @keyframes ignite {
+    0%   { opacity: 0; transform: scale(0.1); }
+    60%  { opacity: 1; transform: scale(1.3); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes flicker {
+    from { transform: scale(1, 1) rotate(-4deg); }
+    to   { transform: scale(0.9, 1.1) rotate(4deg); }
+  }
+  .rays line { stroke: #ff9d2e; stroke-width: 9; stroke-linecap: round; opacity: 0; }
+  .cake-wrap.all-lit .rays line { animation: rays 0.6s ease-in-out infinite alternate; }
+  @keyframes rays { from { opacity: 0.35; } to { opacity: 1; } }
+  #intro > .countdown-num {
+    position: static;
+    transform: none;
+    font-size: clamp(48px, 12vw, 76px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--gold);
+    text-shadow: 0 0 18px rgba(255,212,94,0.6), 0 4px 0 #b8860b;
+    min-height: 1em;
+  }
+  #intro > .countdown-num.pulse { animation: numPop 0.5s ease; }
+  @keyframes numPop {
+    0%   { transform: scale(0.4); opacity: 0; }
+    60%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+  /* ---- Réponse Oui / Non par SMS ---- */
+  .cta-btn { font-family: inherit; border: none; cursor: pointer; }
+  .rsvp {
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+    background: rgba(6, 3, 20, 0.72);
+    backdrop-filter: blur(4px);
+  }
+  .rsvp[hidden] { display: none; }
+  .rsvp-card {
+    position: relative;
+    width: min(100%, 380px);
+    padding: 26px 22px 20px;
+    border-radius: 22px;
+    background: linear-gradient(160deg, #241050, #120732);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(176,110,245,0.3);
+    text-align: center;
+    animation: rsvpIn 0.3s ease;
+  }
+  @keyframes rsvpIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .rsvp-close {
+    position: absolute; top: 10px; right: 12px;
+    border: none; background: none; color: var(--text); opacity: 0.6;
+    font-size: 18px; cursor: pointer;
+  }
+  .rsvp-title { font-size: 19px; font-weight: 800; margin-bottom: 16px; color: var(--gold); }
+  .rsvp-label { display: block; text-align: left; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--accent2); }
+  .rsvp-input {
+    width: 100%; padding: 12px 14px;
+    font: inherit; font-size: 16px;
+    border-radius: 12px; border: 2px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08); color: var(--text);
+    outline: none;
+  }
+  .rsvp-input:focus { border-color: var(--accent2); }
+  .rsvp-input.error { border-color: #ff6b6b; }
+  .rsvp-error { display: none; color: #ff8a8a; font-size: 13px; margin-top: 6px; text-align: left; }
+  .rsvp-error.show { display: block; }
+  .rsvp-choices { display: flex; gap: 10px; margin-top: 18px; }
+  .rsvp-choices button {
+    flex: 1; padding: 13px 8px;
+    font: inherit; font-weight: 800; font-size: 15px;
+    border: none; border-radius: 14px; cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .rsvp-choices button:active { transform: scale(0.96); }
+  .rsvp-yes { background: linear-gradient(90deg, #3ddc84, #4ee8ff); color: #0b2a1a; }
+  .rsvp-no  { background: rgba(255,255,255,0.12); color: var(--text); border: 1px solid rgba(255,255,255,0.2) !important; }
+  .rsvp-choices[hidden], .rsvp-step2[hidden] { display: none; }
+  .rsvp-step2 { animation: rsvpIn 0.3s ease; }
+  .rsvp-back {
+    margin-top: 10px; border: none; background: none; cursor: pointer;
+    font: inherit; font-size: 13px; color: var(--text); opacity: 0.7; text-decoration: underline;
+  }
+  .rsvp-preview-label { text-align: left; font-size: 13px; font-weight: 600; color: var(--accent2); margin: 16px 0 6px; }
+  .rsvp-preview {
+    text-align: left; font-size: 14px; line-height: 1.45;
+    padding: 12px 14px; border-radius: 16px 16px 16px 4px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    min-height: 3.2em; white-space: pre-wrap;
+  }
+  .rsvp-send {
+    width: 100%; margin-top: 14px; padding: 13px;
+    font: inherit; font-weight: 800; font-size: 16px;
+    border: none; border-radius: 14px; cursor: pointer;
+    color: #1a0b3d; background: linear-gradient(90deg, var(--gold), var(--accent2));
+  }
+  .rsvp-hint { font-size: 12px; opacity: 0.7; margin-top: 14px; }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<div id="intro">
+  <div class="intro-label">La fête commence dans</div>
+  <div class="cake-wrap">
+    <img class="cake-img" src="gateau.webp" alt="Gâteau d'anniversaire 6 ans">
+    <svg class="cake-fx" viewBox="0 0 1024 1024" aria-hidden="true">
+      <defs>
+        <radialGradient id="halo"><stop offset="0" stop-color="#ffd45e" stop-opacity=".55"/><stop offset="1" stop-color="#ffd45e" stop-opacity="0"/></radialGradient>
+      </defs>
+      <g class="wicks"><line x1="198" y1="284" x2="212" y2="312"/><line x1="308" y1="226" x2="322" y2="258"/><line x1="401" y1="194" x2="406" y2="222"/><line x1="735" y1="226" x2="727" y2="258"/><line x1="850" y1="283" x2="836" y2="308"/><line x1="545" y1="158" x2="548" y2="196"/></g>
+      <g class="rays"><line x1="458" y1="142" x2="484" y2="140"/><line x1="474" y1="94" x2="490" y2="104"/><line x1="474" y1="188" x2="490" y2="175"/><line x1="596" y1="86" x2="608" y2="72"/><line x1="604" y1="160" x2="626" y2="168"/><line x1="606" y1="124" x2="634" y2="120"/></g>
+      <g class="flame-slot" transform="translate(198 310) scale(1.00 1.01)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g><g class="flame-slot" transform="translate(308 252) scale(1.01 0.99)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g><g class="flame-slot" transform="translate(401 220) scale(0.85 0.93)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g><g class="flame-slot" transform="translate(735 252) scale(1.02 0.99)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g><g class="flame-slot" transform="translate(850 309) scale(1.05 1.02)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g><g class="flame-slot big" transform="translate(545 184) scale(1.11 1.20)"><g class="flame"><ellipse class="halo" cx="0" cy="-50" rx="70" ry="80"/><path d="M0 -105 C30 -62 46 -34 38 -16 C30 2 -30 2 -38 -16 C-46 -34 -30 -62 0 -105 Z" fill="#ff6d1f" stroke="#b83a0d" stroke-width="6" stroke-linejoin="round"/><path d="M0 -72 C18 -46 28 -28 22 -14 C16 -2 -16 -2 -22 -14 C-28 -28 -18 -46 0 -72 Z" fill="#ffab2e"/><path d="M0 -44 C10 -30 15 -20 12 -12 C8 -4 -8 -4 -12 -12 C-15 -20 -10 -30 0 -44 Z" fill="#ffe95c"/></g></g>
+    </svg>
+  </div>
+  <div class="countdown-num" id="countdownNum">6</div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="glow"></div>
+
+  <div class="title-wrap">
+    <div class="kicker">✨ Toi aussi tu es une star ✨</div>
+    <h1>C'est la fête !</h1>
+  </div>
+
+  <p class="sub">Tu es <b>officiellement invité(e)</b><br>à l'anniversaire de <b>Lyam</b> 🎂<br>On t'attend !</p>
+
+  <div class="photo-frame">
+    <img src="kpop.jpg" alt="K-pop Demons - trio">
+  </div>
+
+  <div class="details">
+    <div class="detail-row"><span class="ico">📅</span> Date : Samedi 3 octobre</div>
+    <div class="detail-row"><span class="ico">⏰</span> Heure : de 14h à 17h</div>
+    <div class="detail-row"><span class="ico">📍</span> Lieu : Terrain vague flamboyant</div>
+  </div>
+
+  <div class="cta-row">
+    <button class="cta cta-btn" type="button" onclick="openRsvp()">📱 Je réponds</button>
+    <button class="cta cta-confetti" onclick="burstConfetti();">🎉 Confettis !</button>
+  </div>
+
+  <div class="footer-note">On compte sur toi, ça va être énorme 🔥</div>
+</div>
+
+
+<div id="rsvp" class="rsvp" hidden>
+  <form class="rsvp-card" id="rsvpForm" onsubmit="return false;">
+    <button type="button" class="rsvp-close" onclick="closeRsvp()" aria-label="Fermer">✕</button>
+    <div class="rsvp-title">Tu viens à l'anniversaire de Lyam ? 🎂</div>
+    <label class="rsvp-label" for="rsvpName">Prénom de l'enfant</label>
+    <input id="rsvpName" class="rsvp-input" type="text" autocomplete="given-name" placeholder="Ex : Emma" maxlength="40">
+    <div class="rsvp-error" id="rsvpError">Écris d'abord le prénom de l'enfant 🙂</div>
+    <div class="rsvp-choices" id="rsvpStep1">
+      <button type="button" class="rsvp-yes" id="rsvpYes" onclick="chooseRsvp(true)">✅ Oui, je viens !</button>
+      <button type="button" class="rsvp-no" id="rsvpNo" onclick="chooseRsvp(false)">❌ Non, désolé</button>
+    </div>
+    <div class="rsvp-step2" id="rsvpStep2" hidden>
+      <div class="rsvp-preview-label">📱 Ton message :</div>
+      <div class="rsvp-preview" id="rsvpPreview"></div>
+      <button type="button" class="rsvp-send" onclick="sendRsvp()">📱 Envoyer le message</button>
+      <button type="button" class="rsvp-back" onclick="backRsvp()">↩ Changer ma réponse</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const colors = ['#b06ef5', '#4ee8ff', '#ffd45e', '#ff6ec7', '#ffffff'];
+  let pieces = [];
+
+  function makePiece(x, y) {
+    return {
+      x: x, y: y,
+      w: 6 + Math.random() * 6,
+      h: 8 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 6,
+      vy: 2 + Math.random() * 4,
+      rot: Math.random() * 360,
+      vr: (Math.random() - 0.5) * 12,
+      life: 0,
+      maxLife: 300 + Math.random() * 200
+    };
+  }
+
+  function spawnBatch(count) {
+    for (let i = 0; i < count; i++) {
+      pieces.push(makePiece(Math.random() * W, -20 - Math.random() * 200));
+    }
+  }
+
+  function spawnBurst(count, cx, cy) {
+    if (cx === undefined) { cx = W / 2; cy = H / 2; }
+    for (let i = 0; i < count; i++) {
+      const p = makePiece(cx + (Math.random() - 0.5) * 60, cy + (Math.random() - 0.5) * 60);
+      p.vx = (Math.random() - 0.5) * 14;
+      p.vy = -6 - Math.random() * 6;
+      pieces.push(p);
+    }
+  }
+
+  // Bouton Confettis : plusieurs explosions un peu partout sur l'écran, les unes après les autres
+  window.burstConfetti = function () {
+    const nb = 7;
+    for (let i = 0; i < nb; i++) {
+      setTimeout(() => {
+        const x = W * (0.1 + Math.random() * 0.8);
+        const y = H * (0.15 + Math.random() * 0.6);
+        spawnBurst(50, x, y);
+      }, i * 130 + Math.random() * 80);
+    }
+  };
+
+  // ---- Réponse Oui / Non : ouvre un SMS pré-rempli avec le prénom de l'enfant ----
+  const RSVP_NUMERO = '0693442094';
+  const rsvpEl = document.getElementById('rsvp');
+  const nameEl = document.getElementById('rsvpName');
+  const errEl = document.getElementById('rsvpError');
+
+  let rsvpChoix = null; // true = oui, false = non
+  const previewEl = document.getElementById('rsvpPreview');
+  const step1El = document.getElementById('rsvpStep1');
+  const step2El = document.getElementById('rsvpStep2');
+
+  function rsvpMessage() {
+    const prenom = nameEl.value.trim();
+    return rsvpChoix ? `${prenom} sera là` : `${prenom} ne sera pas là`;
+  }
+
+  function nameOk() {
+    if (nameEl.value.trim()) return true;
+    nameEl.classList.add('error'); errEl.classList.add('show'); nameEl.focus();
+    return false;
+  }
+
+  window.openRsvp = function () {
+    rsvpChoix = null;
+    step1El.hidden = false;
+    step2El.hidden = true;
+    rsvpEl.hidden = false;
+    setTimeout(() => nameEl.focus(), 50);
+  };
+  window.closeRsvp = function () { rsvpEl.hidden = true; };
+  rsvpEl.addEventListener('click', (e) => { if (e.target === rsvpEl) closeRsvp(); });
+  nameEl.addEventListener('input', () => {
+    nameEl.classList.remove('error'); errEl.classList.remove('show');
+    if (rsvpChoix !== null) previewEl.textContent = rsvpMessage();
+  });
+
+  // Clic sur Oui ou Non : le message apparaît à la place des boutons
+  window.chooseRsvp = function (oui) {
+    if (!nameOk()) return;
+    rsvpChoix = oui;
+    previewEl.textContent = rsvpMessage();
+    step1El.hidden = true;
+    step2El.hidden = false;
+  };
+
+  window.backRsvp = function () {
+    rsvpChoix = null;
+    step2El.hidden = true;
+    step1El.hidden = false;
+  };
+
+  window.sendRsvp = function () {
+    if (!nameOk() || rsvpChoix === null) return;
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const sep = iOS ? '&' : '?';
+    const url = `sms:${RSVP_NUMERO}${sep}body=${encodeURIComponent(rsvpMessage())}`;
+    if (rsvpChoix) burstConfetti();
+    closeRsvp();
+    window.__rsvpSent = true;
+    window.location.href = url;
+  };
+
+  let ambientTimer = 0;
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    ambientTimer++;
+    if (ambientTimer % 40 === 0) spawnBatch(8);
+
+    pieces.forEach(p => {
+      p.vy += 0.05;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      p.life++;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+
+    pieces = pieces.filter(p => p.y < H + 40 && p.life < p.maxLife);
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+  // Intro gâteau : cache le contenu, 6 bougies s'allument une par une, puis explosion de confettis
+  const introEl = document.getElementById('intro');
+  const numEl = document.getElementById('countdownNum');
+  const stageEl = document.getElementById('stage');
+  const candles = Array.from(document.querySelectorAll('#intro .flame-slot'));
+  const cakeEl = document.querySelector('#intro .cake-wrap');
+  let count = candles.length; // 6 bougies = 6 secondes
+  let timer = null;
+
+  function startIntro() {
+    clearTimeout(timer);
+    count = candles.length;
+    candles.forEach(c => c.classList.remove('lit'));
+    cakeEl.classList.remove('all-lit');
+    numEl.style.visibility = 'visible';
+    pieces = [];
+    numEl.textContent = count;
+    introEl.classList.remove('hidden');
+    stageEl.classList.remove('reveal');
+    timer = setTimeout(tick, 300);
+  }
+
+  function tick() {
+    if (count > 0) {
+      numEl.textContent = count;
+      numEl.classList.remove('pulse');
+      void numEl.offsetWidth; // relance l'animation
+      numEl.classList.add('pulse');
+      timer = setTimeout(() => {
+        candles[candles.length - count].classList.add('lit'); // une bougie s'allume chaque seconde
+        count--;
+        if (count === 0) cakeEl.classList.add('all-lit');
+        tick();
+      }, 1000);
+    } else {
+      numEl.style.visibility = 'hidden';
+      timer = setTimeout(() => {
+        introEl.classList.add('hidden');
+        stageEl.classList.add('reveal');
+        spawnBurst(220);
+        spawnBatch(30);
+        setTimeout(() => spawnBurst(120), 300);
+      }, 1200);
+    }
+  }
+
+  // Relance le gâteau + décompte à CHAQUE affichage de la page :
+  // ouverture, rafraîchissement, retour arrière, ou retour dans l'onglet/l'appli (téléphone)
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  startIntro();
+  window.addEventListener('pageshow', (e) => { if (e.persisted) startIntro(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && !window.__rsvpSent) startIntro();
+  });
+})();
+</script>
+
+
+</body>
+</html>
